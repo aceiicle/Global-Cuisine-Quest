@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="py-5 text-center">
+    <h2>Welcome to Global Cuisine Quest</h2>
+    <p class="lead">Embark on a culinary journey around the world from the comfort of your kitchen. Accept cooking challenges, share your own recipes, and explore global cuisines with a community of food enthusiasts.</p>
+</div>
+
+<div class="row">
+  
+    <div class="col-md-4">
+        <h4>Discover New Recipes</h4>
+        <p>Explore an ever-growing collection of recipes submitted by users worldwide. Filter by cuisine, difficulty, or ingredients to find your next culinary adventure.</p>
+        <p><a class="btn btn-secondary" href="{{ url_for('main.challenge_list') }}" role="button">View challenges &raquo;</a></p>
+    </div>
+  
+    <div class="col-md-4">
+        <h4>Share Your Creations</h4>
+        <p>Got a unique recipe or an exciting cooking challenge? Share it with the Global Cuisine Quest community and see how others take on your culinary challenge.</p>
+        <p><a class="btn btn-secondary" href="{{ url_for('main.create_challenge') }}" role="button">Create a challenge &raquo;</a></p>
+    </div>
+  
+    <div class="col-md-4">
+        <h4>Join the Community</h4>
+        <p>Connect with fellow food lovers. Exchange tips, offer feedback, and participate in community events. Together, we make cooking fun and rewarding.</p>
+        <p><a class="btn btn-secondary" href="{{ url_for('auth.register') }}" role="button">Sign up &raquo;</a></p>
+    </div>
+  
+</div>
+{% endblock %}
