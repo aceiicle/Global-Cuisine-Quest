@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Available Challenges</h2>
+    <p>Browse through the challenges below and select one to participate in. Whether you're looking for something easy to start with or ready for a more difficult task, there's something here for everyone.</p>
+    
+    <div class="row">
+        {% for challenge in challenges %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ url_for('main.static', filename='images/challenges/' + challenge.image_filename) }}" class="card-img-top" alt="Image of {{ challenge.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ challenge.title }}</h5>
+                        <p class="card-text">{{ challenge.description | truncate(150) }}</p>
+                        <a href="{{ url_for('main.challenge_detail', challenge_id=challenge.id) }}" class="btn btn-primary">View Challenge</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Posted by {{ challenge.user.username }} on {{ challenge.created_at.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center">No challenges available at the moment. Check back later!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
