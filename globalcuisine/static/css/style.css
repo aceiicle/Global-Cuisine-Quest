@@ -9,13 +9,21 @@ body {
     background-color: #f8f9fa;
     color: #333;
     line-height: 1.6;
-    padding-top: 60px; /* Adjust based on navbar height */
+    padding-top: 0px; /* Adjust based on navbar height */
+    /* In effort to stop footer issues*/
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* This ensures the footer sticks to the bottom even if the content is shorter */
+
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    /* In effort to stop footer issues*/
+    padding-top: 10px; /* Adjust padding as needed */
+    padding-bottom: 10px; /* Adjust padding as needed */
 }
 
 /* Navigation Bar */
@@ -42,6 +50,7 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
+    flex-shrink: 0; /* Prevents footer from shrinking */
 }
 
 /* Headings & Text */
