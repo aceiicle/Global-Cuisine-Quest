@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     // Example: Form Submission Feedback
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
@@ -13,6 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+    });
+
+    // Initialize RateYo! for the difficulty level field
+    var $rateYo = $(".rateyo").rateYo({
+        fullStar: true
+    });
+
+    $rateYo.on("rateyo.set", function (e, data) {
+        $('#difficulty_level').val(data.rating);
     });
 
     document.getElementById('loadMoreChallenges').addEventListener('click', function() {

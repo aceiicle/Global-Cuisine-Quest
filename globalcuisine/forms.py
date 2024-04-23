@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from .models import User
+from wtforms.widgets import html_params
+from markupsafe import Markup, escape
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -26,17 +28,27 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class StarRatingWidget(object):
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('id', field.id)
+        kwargs.setdefault('name', field.name)
+        kwargs.setdefault('class', 'rateyo')
+        html = Markup(f'<div {html_params(**kwargs)}></div>')
+        html += Markup(f'<input type="hidden" name="{field.name}" value="{field._value()}">')
+        return html
+    
+class StarField(StringField):
+    widget = StarRatingWidget()
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = float(valuelist[0])
+        else:
+            self.data = 0.0
+
 class CreateChallengeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     cuisine_type = SelectField('Cuisine Type', choices=[('option1', 'Option 1'), ('option2', 'Option 2')], validators=[DataRequired()])
-    difficulty_level = SelectField(
-        'Difficulty Level',
-        choices=[
-            ('easy', 'Easy'), 
-            ('medium', 'Medium'), 
-            ('hard', 'Hard')
-        ],
-        validators=[DataRequired()]
-    )
+    difficulty_level = StarField('Difficulty Level', validators=[DataRequired()])
     submit = SubmitField('Create')
