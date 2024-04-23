@@ -1,6 +1,7 @@
 # globalcuisine/main.py
 from flask import Blueprint, render_template
 from .forms import CreateChallengeForm
+from flask import flash
 
 main = Blueprint('main', __name__)
 
@@ -18,6 +19,10 @@ def challenge_list():
     # Fetch challenges from the database or define them
     challenges = []  # Replace with actual data fetching logic
     return render_template('challenge_list.html', challenges=challenges)
+
+from flask import redirect  # Import the redirect function
+
+from flask import url_for  # Import the url_for function
 
 @main.route('/create-challenge', methods=['GET', 'POST'])
 def create_challenge():
