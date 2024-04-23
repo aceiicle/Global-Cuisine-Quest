@@ -13,7 +13,9 @@ body {
     margin: 0 auto;
     padding: 20px;
 }
-
+.column-container {
+    column-count: 3
+}
 /* Navigation Bar */
 .navbar {
     background-color: #007bff;
