@@ -1,22 +1,43 @@
 # globalcuisine/auth.py
-from flask import Blueprint, render_template, redirect, url_for, flash
-from .forms import RegistrationForm
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+from .forms import RegistrationForm, LoginForm
+from .models import User
+from . import db
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        data = request.form
+        user = User.query.filter_by(username=data['username']).first()
+        if user and user.check_password(data['password']):
+            return jsonify({'message': 'Login successful!'})
+        else:
+            return jsonify({'message': 'Invalid credentials!'}), 401
+    else:
+        form = LoginForm()
+        return render_template('login.html', form=form)
 
 @auth.route('/logout')
 def logout():
     return 'Logout'
 
-@auth.route('/register')
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        # Logic to handle form submission
+        username = form.username
+        email = form.email
+        password = form.password
+
+        form.validate_username(username)
+
+        form.validate_email(email)
+
+        form.create_user()
+
         flash('Account created successfully!', 'success')
         return redirect(url_for('auth.login'))  # Redirect to the login page
+
     return render_template('register.html', form=form)

@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from .models import User
 from wtforms.widgets import html_params
 from markupsafe import Markup, escape
+from . import db
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -15,19 +16,31 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
-            raise ValidationError('That username is already taken. Please choose a different one.')
+            raise ValidationError('That username is already in use. Please choose a different one.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is already in use. Please choose a different one.')
 
+    def create_user(self):
+        user = User(username=self.username.data, email=self.email.data)
+        user.set_password(self.password.data)
+        db.session.add(user)
+        db.session.commit()
+
 class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if not user:
+            raise ValidationError('No user found with that username.')
+        
 class StarRatingWidget(object):
     def __call__(self, field, **kwargs):
         kwargs.setdefault('id', field.id)
