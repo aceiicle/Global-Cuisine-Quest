@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
-
-db = SQLAlchemy()
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,6 +11,12 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     challenges = db.relationship('Challenge', backref='author', lazy=True)
     submissions = db.relationship('Submission', backref='user', lazy=True)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
