@@ -59,6 +59,11 @@ def create_challenge():
         return redirect(url_for('challenge_list'))
     return render_template('create_challenge.html', title='Create Challenge', form=form)
 
+@app.route('/view_challenges')
+def challenge_list():
+    challenges = Challenge.query.all()
+    return render_template('challenge_list.html', challenges=challenges)
+
 @app.route('/logout')
 def logout():
     logout_user()
