@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from .models import User, Challenge, Submission
-from .forms import LoginForm, RegistrationForm
+from .forms import CreateChallengeForm, LoginForm, RegistrationForm
 from . import create_app
 
 app = create_app()
@@ -40,6 +40,24 @@ def login():
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
+
+@app.route('/create_challenge', methods=['GET', 'POST'])
+@login_required
+def create_challenge():
+    form = CreateChallengeForm()
+    if form.validate_on_submit():
+        challenge = Challenge(
+            title=form.title.data,
+            description=form.description.data,
+            cuisine_type=form.cuisine_type.data,
+            difficulty_level=form.difficulty_level.data,
+            user_id=current_user.id  # Assuming current_user is from Flask-Login
+        )
+        db.session.add(challenge)
+        db.session.commit()
+        flash('Your challenge has been created!', 'success')
+        return redirect(url_for('challenge_list'))
+    return render_template('create_challenge.html', title='Create Challenge', form=form)
 
 @app.route('/logout')
 def logout():
