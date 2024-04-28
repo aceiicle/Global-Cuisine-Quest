@@ -9,11 +9,11 @@
         {% for challenge in challenges %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ url_for('main.static', filename='images/challenges/' + challenge.image_filename) }}" class="card-img-top" alt="Image of {{ challenge.title }}">
+                    <img src="{{ url_for('static', filename='images/challenges/' + challenge.image_filename) }}" class="card-img-top" alt="Image of {{ challenge.title }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ challenge.title }}</h5>
                         <p class="card-text">{{ challenge.description | truncate(150) }}</p>
-                        <a href="{{ url_for('main.challenge_detail', challenge_id=challenge.id) }}" class="btn btn-primary">View Challenge</a>
+                        <a href="{{ url_for('challenge_detail', challenge_id=challenge.id) }}" class="btn btn-primary">View Challenge</a>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">Posted by {{ challenge.user.username }} on {{ challenge.created_at.strftime('%Y-%m-%d') }}</small>
