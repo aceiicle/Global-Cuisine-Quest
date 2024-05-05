@@ -39,7 +39,14 @@ class LoginForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if not user:
-            raise ValidationError('No user found with that username.')
+            raise ValidationError('That username does not exist. Please register.')
+    
+    def validate_password(self, password):
+        user = User.query.filter_by(username=self.username.data).first()
+        if user and not user.check_password(password.data):
+            raise ValidationError('Incorrect password.')
+        
+    
         
 class StarRatingWidget(object):
     def __call__(self, field, **kwargs):
