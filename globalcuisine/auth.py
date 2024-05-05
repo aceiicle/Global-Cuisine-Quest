@@ -1,5 +1,8 @@
 # globalcuisine/auth.py
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+import logging
+logging.basicConfig(level=logging.INFO)
+from flask import Blueprint, render_template, redirect, session, url_for, flash, request, jsonify
+from flask_login import login_user
 from .forms import RegistrationForm, LoginForm
 from .models import User
 from . import db
@@ -9,6 +12,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     # Undesired behavior: Does not redirect to the dashboard page upon successful login
+    # I do not understand why views.py has the same code as this file, I don't even know if I wrote the code in views.py
     """
     Handle the login functionality.
 
@@ -22,10 +26,13 @@ def login():
     """
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember.data, force=True)
 
-        return redirect(url_for('main.dashboard'))
+            return redirect(url_for('main.dashboard'))  # Redirect to the dashboard page
+        else:
+            flash('Invalid username or password. Please try again.', 'danger')  
 
     return render_template('login.html', form=form)
 

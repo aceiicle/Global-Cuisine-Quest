@@ -46,6 +46,8 @@ class LoginForm(FlaskForm):
         if user and not user.check_password(password.data):
             raise ValidationError('Incorrect password.')
         
+    
+        
 class StarRatingWidget(object):
     def __call__(self, field, **kwargs):
         kwargs.setdefault('id', field.id)
