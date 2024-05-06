@@ -119,6 +119,38 @@ form .form-control:focus {
     border-top: 1px solid #ced4da;
 }
 
+/* Recipes */
+
+.recipe-gallery {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.recipe {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 10px;
+    text-align: center;
+    width: 200px; /* Adjust width as needed */
+}
+
+.recipe a {
+    color: black;
+    text-decoration: none;
+}
+
+.recipe img {
+    width: 100%;
+    height: auto;
+    display: block;
+    visibility: visible;
+}
+
+.recipe span {
+    display: block;
+    padding: 10px;
+}
+
 /* Adjustments for smaller screens */
 @media (max-width: 768px) {
     .container {
