@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from flask.cli import with_appcontext
 import click
 
@@ -18,6 +19,8 @@ def create_app():
 
     db.init_app(app)
     
+    migrate = Migrate(app, db)
+
     @app.cli.command('create-admin')
     @with_appcontext
     def create_admin():

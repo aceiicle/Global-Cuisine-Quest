@@ -31,6 +31,8 @@ class Challenge(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    cuisine_type = db.Column(db.String(100))  # Make sure this line exists
+    difficulty_level = db.Column(db.String(50), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     submissions = db.relationship('Submission', backref='challenge', lazy=True)
 
