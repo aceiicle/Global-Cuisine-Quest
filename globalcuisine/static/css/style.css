@@ -16,25 +16,23 @@ body {
 .column-container {
     column-count: 3
 }
+
 /* Navigation Bar */
-.navbar {
-    background-color: #007bff;
-    color: #ffffff;
+.navbar.bg-primary {
+    background-color: #c0e0c3 !important;
 }
 
-.navbar a.nav-link {
-    color: #ffffff;
-    margin-right: 10px;
-}
-
-.navbar a.nav-link:hover {
-    color: #cce5ff;
+.navbar .nav-link, .navbar .navbar-brand {
+    color: #333 !important;
 }
 
 /* Footer */
+footer.footer.bg-primary {
+    background-color: #c0e0c3 !important; 
+}
+
 .footer {
-    background-color: #007bff;
-    color: #ffffff;
+    color: #333 !important;
     text-align: center;
     padding: 10px 0;
     flex-shrink: 0; /* Prevents footer from shrinking */
@@ -51,13 +49,13 @@ p {
 
 /* Buttons */
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #495057;
+    border-color: #495057;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #495057;
+    border-color: #495057;
 }
 
 /* Forms */
