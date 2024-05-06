@@ -1,12 +1,9 @@
 # globalcuisine/auth.py
-<<<<<<< HEAD
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
-=======
 import logging
 logging.basicConfig(level=logging.INFO)
 from flask import Blueprint, render_template, redirect, session, url_for, flash, request, jsonify
 from flask_login import login_user
->>>>>>> 39a9d3ed4c29c3d9b9a77b532da9e3a978dedfa7
 from .forms import RegistrationForm, LoginForm
 from .models import User
 from . import db
