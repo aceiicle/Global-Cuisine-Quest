@@ -150,7 +150,36 @@ form .form-control:focus {
     display: block;
     padding: 10px;
 }
+.column {
+    position: relative;
+    overflow: hidden;
+}
 
+.column-image {
+    position: absolute;
+    top: 100%; /* Initially position the image below the column */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-size: cover;
+    background-position: center;
+    transition: top 0.8s, opacity 0.8s; /* Add transition for smooth movement and opacity change */
+    z-index: -1; /* Ensure the image stays behind the content */
+    filter: brightness(30%)
+}
+
+.column:hover .column-image {
+    opacity: 1;
+    top: 0; /* Move the image up to reveal it on hover */
+}
+
+/* Ttransition text color */
+.column:hover h4,
+.column:hover p {
+    color: #fff; /* Change the text color to brighter color on hover */
+    transition: color 1s; /* Add transition for smooth color change */
+}
 /* Adjustments for smaller screens */
 @media (max-width: 768px) {
     .container {

@@ -45,4 +45,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Additional JavaScript functionality
+    /*
+    const columns = document.querySelectorAll('.column');
+    columns.forEach(column => {
+        column.addEventListener('mouseenter', () => {
+            column.classList.add('hovered');
+            });
+        column.addEventListener('mouseleave', () => {
+            column.classList.remove('hovered');
+            });
+        });
+        */
+
 });
