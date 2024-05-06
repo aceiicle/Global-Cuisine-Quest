@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask.cli import with_appcontext
+import click
 
 # Initialize the database
 db = SQLAlchemy()
@@ -15,6 +17,19 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
+    
+    @app.cli.command('create-admin')
+    @with_appcontext
+    def create_admin():
+        from models import User  # Importing here to avoid circular imports
+        if not User.query.filter_by(username='admin').first():
+            admin = User(username='admin', email='admin@example.com')
+            admin.set_password('securepassword')  # Assuming you have a set_password method to hash the password
+            db.session.add(admin)
+            db.session.commit()
+            click.echo('Admin user created.')
+        else:
+            click.echo('Admin user already exists.')
 
     # Initialize LoginManager
     login_manager = LoginManager()
