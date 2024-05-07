@@ -21,7 +21,10 @@
                 </div>
             </div>
         {% else %}
-            <p class="text-center">No challenges available at the moment. Check back later!</p>
+            <div class="col-md-12">
+                <p class="text-center">No challenges available at the moment. Be the first to create one!</p>
+                <p class="text-center"><a class="btn btn-secondary" href="{{ url_for('main.create_challenge') }}" role="button">Create a challenge &raquo;</a></p>
+            </div>    
         {% endfor %}
     </div>
 </div>

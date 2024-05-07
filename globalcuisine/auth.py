@@ -30,7 +30,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data, force=True)
-
+            flash('Successfully logged in!')
             return redirect(url_for('main.dashboard'))  # Redirect to the dashboard page
         else:
             flash('Invalid username or password. Please try again.', 'danger')  
