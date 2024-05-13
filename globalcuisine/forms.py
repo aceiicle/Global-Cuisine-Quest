@@ -67,7 +67,26 @@ class StarField(StringField):
 
 class CreateChallengeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
+    recipe_type = SelectField('Recipe Type', choices=[('Challenge', 'Challenge'),('Family Recipe', 'Family Recipe'), ('Quick and Easy', 'Quick and Easy'), ('One-Pot', 'One-Pot'), ('Budget-Friendly', 'Budget-Friendly')], validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    cuisine_type = SelectField('Cuisine Type', choices=[('option1', 'Option 1'), ('option2', 'Option 2')], validators=[DataRequired()])
+    is_recipe = BooleanField('Is Your Post a Recipe?')
+    ingredients = TextAreaField('Ingredients')
+    recipe_instructions = TextAreaField('Recipe Instructions')
+    cuisine_type = SelectField('Cuisine Region', choices=[('North American', 'North American'), ('South American', 'South American'), ('African', 'African'), ('Middle Eastern', 'Middle Eastern'), ('Northern European', 'Northern European'), ('Central European', 'Central European'), ('Eastern European', 'Eastern European'), ('West Asian', 'West Asian'), ('North Asian', 'North Asian'), ('Japanese', 'Japanese'), ('South Asian', 'South Asian'), ('Oceania', 'Oceania')], validators=[DataRequired()])
+    cuisine_style = SelectField('Cuisine Style', choices=[('Home Cook', 'Home Cook'),('Fast Food', 'Fast Food'), ('Fusion Cuisine', 'Fusion Cuisine'), ('Grande Cuisine', 'Grande Cuisine'), ('Molecular Gastronomy', 'Molecular Gastronomy'), ('Vegetarian Cuisine', 'Vegetarian Cuisine'), ('Vegan Cuisine', 'Vegan Cuisine'), ('Street Food', 'Street Food'), ('Soul Food', 'Soul Food')], validators=[DataRequired()])
     difficulty_level = StarField('Difficulty Level', validators=[DataRequired()])
     submit = SubmitField('Create')
+# Add JavaScript to toggle the visibility of the textarea based on the boolean field's value
+toggle_script = """
+<script>
+    function toggleTextArea() {
+        var checkbox = document.getElementById('is_recipe');
+        var textarea = document.getElementById('recipe_instructions');
+        if (checkbox.checked) {
+            textarea.style.display = 'block';
+        } else {
+            textarea.style.display = 'none';
+        }
+    }
+</script>
+"""

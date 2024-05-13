@@ -30,6 +30,32 @@
                 </div>
             {% endif %}
         </div>
+        
+        <div class="form-group">
+            <label for="is_recipe">Is Your Post a Recipe?</label>
+            {{ form.is_recipe(id='is_recipe', onchange='toggleTextArea()') }}
+        </div>
+      
+        <div class="form-group" id="recipeInstructionsGroup" style="display: none;">
+            <label for="ingredients">Ingredients</label>
+            <textarea class="form-control" name="ingredients" id="ingredients"></textarea>
+            {% if form.ingredients.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.ingredients.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <label for="recipe_instructions">Recipe Instructions</label>
+            <textarea class="form-control" name="recipe_instructions" id="recipe_instructions"></textarea>
+            {% if form.recipe_instructions.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.recipe_instructions.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
       
         <div class="form-group">
             <label for="cuisine_type">Cuisine Type</label>
@@ -37,6 +63,18 @@
             {% if form.cuisine_type.errors %}
                 <div class="alert alert-danger" role="alert">
                     {% for error in form.cuisine_type.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="cuisine_style">Cuisine Style</label>
+            {{ form.cuisine_style(class_="form-control", id="cuisine_style") }}
+            {% if form.cuisine_style.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.cuisine_style.errors %}
                         <p>{{ error }}</p>
                     {% endfor %}
                 </div>
@@ -55,4 +93,19 @@
       
     </form>
 </div>
+
+<script>
+    function toggleTextArea() {
+        var checkbox = document.getElementById('is_recipe');
+        var textareaGroup = document.getElementById('recipeInstructionsGroup');
+        if (checkbox.checked) {
+            textareaGroup.style.display = 'block';
+        } else {
+            textareaGroup.style.display = 'none';
+        }
+    }
+    
+    // Call the toggle function initially to set the textarea visibility based on the initial checkbox state
+    toggleTextArea();
+</script>
 {% endblock %}

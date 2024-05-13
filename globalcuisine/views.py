@@ -49,8 +49,13 @@ def create_challenge():
     if form.validate_on_submit():
         challenge = Challenge(
             title=form.title.data,
+            recipe_type=form.recipe_type.data,
             description=form.description.data,
+            is_recipe=form.is_recipe.data,
+            ingredients=form.ingredients.data,
+            recipe_instructions=form.recipe_instructions.data,
             cuisine_type=form.cuisine_type.data,
+            cuisine_style=form.cuisine_style.data,
             difficulty_level=form.difficulty_level.data,
             user_id=current_user.id  # Assuming current_user is from Flask-Login
         )
