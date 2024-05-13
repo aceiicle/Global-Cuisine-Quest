@@ -30,7 +30,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         logging.info('Form validated successfully.')
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter((User.username == form.username_or_email.data) | (User.email == form.username_or_email.data)).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
             # Debug Output
@@ -38,7 +38,7 @@ def login():
 
             return redirect(url_for('main.dashboard'))  # Redirect to the dashboard page
         else:
-            flash('Invalid username or password. Please try again.', 'danger')  
+            flash('Invalid email/ username or password. Please try again.', 'danger')  
 
     return render_template('login.html', form=form)
 
