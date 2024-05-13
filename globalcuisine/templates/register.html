@@ -42,19 +42,38 @@
                     </div>
                 {% endif %}
             </div>
-          
+
+            
             <div class="form-group">
                 <label for="confirm">Confirm Password</label>
                 {{ form.confirm(class_="form-control", id="confirm") }}
                 {% if form.confirm.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {% for error in form.confirm.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.confirm.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
-          
+            
+            <div class="form-group">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <div class="alert-title">Account Created</div>
+                                <div class="alert-message">{{ message }}</div>
+                            </div>
+                            <script type="text/javascript">
+                                setTimeout(function(){
+                                    window.location.href = "{{ url_for('auth.login') }}"
+                                }, 3000);
+                            </script>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>

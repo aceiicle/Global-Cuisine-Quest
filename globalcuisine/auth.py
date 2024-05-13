@@ -30,16 +30,13 @@ def login():
     """
     form = LoginForm()
     if form.validate_on_submit():
-        logging.info('Form validated successfully.')
         user = User.query.filter((User.username == form.username_or_email.data) | (User.email == form.username_or_email.data)).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
-            # Debug Output
-            logging.info('User logged in successfully.')
-
+            
             return redirect(url_for('main.dashboard'))  # Redirect to the dashboard page
         else:
-            flash('Invalid email/ username or password. Please try again.', 'danger')  
+            flash('Invalid username or password.', 'danger')  
 
     return render_template('login.html', form=form)
 
@@ -64,7 +61,7 @@ def register():
     if form.validate_on_submit():
         form.create_user()
 
-        flash('Account created successfully!', 'success')
-        return redirect(url_for('auth.login'))  # Redirect to the login page
+        flash('Registration successful, redirecting to user login page.', 'success')
+        #return redirect(url_for('auth.login'))  # Redirect to the login page
 
     return render_template('register.html', form=form)
