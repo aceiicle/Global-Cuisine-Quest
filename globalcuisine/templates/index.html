@@ -9,24 +9,26 @@
 
 <div class="row">
   
-    <div class="col-md-4">
+    <div class="col-md-4 column" style="position: relative;">
+        <div class="column-image" style="background-image: url('static/images/Fresh ingredients.jpg');"></div>
         <h4>Discover New Recipes</h4>
         <p>Explore an ever-growing collection of recipes submitted by users worldwide. Filter by cuisine, difficulty, or ingredients to find your next culinary adventure.</p>
         <p><a class="btn btn-secondary" href="{{ url_for('main.challenge_list') }}" role="button">View challenges &raquo;</a></p>
     </div>
   
-    <div class="col-md-4">
+    <div class="col-md-4 column" style="position: relative;">
+        <div class="column-image" style="background-image: url('static/images/Cooking together.jpg');"></div>
         <h4>Share Your Creations</h4>
         <p>Got a unique recipe or an exciting cooking challenge? Share it with the Global Cuisine Quest community and see how others take on your culinary challenge.</p>
         <p><a class="btn btn-secondary" href="{{ url_for('main.create_challenge') }}" role="button">Create a challenge &raquo;</a></p>
     </div>
   
-    <div class="col-md-4">
+    <div class="col-md-4 column" style="position: relative;">
+        <div class="column-image" style="background-image: url('static/images/Prepared meal.jpg');"></div>
         <h4>Join the Community</h4>
         <p>Connect with fellow food lovers. Exchange tips, offer feedback, and participate in community events. Together, we make cooking fun and rewarding.</p>
         <p><a class="btn btn-secondary" href="{{ url_for('auth.register') }}" role="button">Sign up &raquo;</a></p>
     </div>
-  
 </div>
 
 <div class="container"> 
@@ -101,6 +103,41 @@
 
 <div class="container"> 
     <div class="recipe-gallery mt-4">
+        <h2>Top Australian Dishes</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/meat-pie.png" alt="Meat Pie">
+                    <div class="card-body">
+                        <h5 class="card-title">Meat Pie</h5>
+                        <a href="recipe16.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/lamington.png" alt="Lamington">
+                    <div class="card-body">
+                        <h5 class="card-title">Lamington</h5>
+                        <a href="recipe17.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/pavlova.png" alt="Pavlova">
+                    <div class="card-body">
+                        <h5 class="card-title">Pavlova</h5>
+                        <a href="recipe18.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container"> 
+    <div class="recipe-gallery mt-4">
         <h2>Top South American Dishes</h2>
         <div class="row">
             <div class="col-md-4 mb-4">
@@ -161,7 +198,42 @@
                     <img class="card-img-top" src="static/images/buffalo-wings.png" alt="Buffalo Wings">
                     <div class="card-body">
                         <h5 class="card-title">Buffalo Wings</h5>
-                        <a href="recipe9.html" class="btn btn-primary">View Recipe</a>
+                        <a href="recipe12.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container"> 
+    <div class="recipe-gallery mt-4">
+        <h2>Top African Dishes</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/beef-tagine.png" alt="Beef Tagine">
+                    <div class="card-body">
+                        <h5 class="card-title">Beef Tagine</h5>
+                        <a href="recipe13.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/chakalaka.png" alt="Chakalaka">
+                    <div class="card-body">
+                        <h5 class="card-title">Chakalaka</h5>
+                        <a href="recipe14.html" class="btn btn-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="static/images/peri-peri-chicken.png" alt="Peri Peri Chicken">
+                    <div class="card-body">
+                        <h5 class="card-title">Peri Peri Chicken</h5>
+                        <a href="recipe15.html" class="btn btn-primary">View Recipe</a>
                     </div>
                 </div>
             </div>
