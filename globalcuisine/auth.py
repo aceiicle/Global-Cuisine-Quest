@@ -7,6 +7,9 @@ from .forms import RegistrationForm, LoginForm
 from .models import User
 from . import db
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.info('Logging started')
+
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -26,9 +29,12 @@ def login():
     """
     form = LoginForm()
     if form.validate_on_submit():
+        logging.info('Form validated successfully.')
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
+            # Debug Output
+            logging.info('User logged in successfully.')
 
             return redirect(url_for('main.dashboard'))  # Redirect to the dashboard page
         else:

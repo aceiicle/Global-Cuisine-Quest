@@ -14,13 +14,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
+        self.user = User.query.filter_by(username=username.data).first()
+        if self.user:
             raise ValidationError('That username is already in use. Please choose a different one.')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
+        if self.user:
             raise ValidationError('That email is already in use. Please choose a different one.')
 
     def create_user(self):
@@ -37,13 +36,12 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if not user:
+        self.user = User.query.filter_by(username=username.data).first()
+        if not self.user:
             raise ValidationError('That username does not exist. Please register.')
     
     def validate_password(self, password):
-        user = User.query.filter_by(username=self.username.data).first()
-        if user and not user.check_password(password.data):
+        if self.user and not self.user.check_password(password.data):
             raise ValidationError('Incorrect password.')
         
     
