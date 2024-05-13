@@ -14,13 +14,13 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
+        self.user = User.query.filter_by(username=username.data).first()
+        if self.user:
             raise ValidationError('That username is already in use. Please choose a different one.')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
+        self.user = User.query.filter_by(email=email.data).first()
+        if self.user:
             raise ValidationError('That email is already in use. Please choose a different one.')
 
     def create_user(self):
@@ -30,20 +30,19 @@ class RegistrationForm(FlaskForm):
         db.session.commit()
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username_or_email = StringField('Email or Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if not user:
-            raise ValidationError('That username does not exist. Please register.')
+    def validate_username(self, username_or_email):
+        self.user = User.query.filter((User.username==username_or_email.data) | (User.email==username_or_email.data)).first()
+        if not self.user:
+            raise ValidationError('That username or email does not exist. Please register.')
     
     def validate_password(self, password):
-        user = User.query.filter_by(username=self.username.data).first()
-        if user and not user.check_password(password.data):
+        self.user = User.query.filter((User.username==self.username_or_email.data) | (User.email==self.username_or_email.data)).first()
+        if self.user and not self.user.check_password(password.data):
             raise ValidationError('Incorrect password.')
         
     
