@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from .models import User
 from wtforms.widgets import html_params
 from markupsafe import Markup, escape
+from flask_wtf.file import FileField, FileAllowed
 from . import db
 
 class RegistrationForm(FlaskForm):
@@ -75,6 +76,7 @@ class CreateChallengeForm(FlaskForm):
     cuisine_type = SelectField('Cuisine Region', choices=[('North American', 'North American'), ('South American', 'South American'), ('African', 'African'), ('Middle Eastern', 'Middle Eastern'), ('Northern European', 'Northern European'), ('Central European', 'Central European'), ('Eastern European', 'Eastern European'), ('West Asian', 'West Asian'), ('North Asian', 'North Asian'), ('Japanese', 'Japanese'), ('South Asian', 'South Asian'), ('Oceania', 'Oceania')], validators=[DataRequired()])
     cuisine_style = SelectField('Cuisine Style', choices=[('Home Cook', 'Home Cook'),('Fast Food', 'Fast Food'), ('Fusion Cuisine', 'Fusion Cuisine'), ('Grande Cuisine', 'Grande Cuisine'), ('Molecular Gastronomy', 'Molecular Gastronomy'), ('Vegetarian Cuisine', 'Vegetarian Cuisine'), ('Vegan Cuisine', 'Vegan Cuisine'), ('Street Food', 'Street Food'), ('Soul Food', 'Soul Food')], validators=[DataRequired()])
     difficulty_level = StarField('Difficulty Level', validators=[DataRequired()])
+    image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')])
     submit = SubmitField('Create')
 # Add JavaScript to toggle the visibility of the textarea based on the boolean field's value
 toggle_script = """

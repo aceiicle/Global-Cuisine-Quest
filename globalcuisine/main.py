@@ -1,7 +1,9 @@
 # globalcuisine/main.py
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+import os
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from . import db
 from .models import User, Challenge, Submission
 from .forms import CreateChallengeForm, LoginForm, RegistrationForm
@@ -46,6 +48,15 @@ def login():
 def create_challenge():
     form = CreateChallengeForm()
     if form.validate_on_submit():
+        # Extract file from form, if present
+        image_file = form.image.data
+        filename = None
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+        
+        # Create new Challenge object including the image filename if available
         challenge = Challenge(
             title=form.title.data,
             recipe_type=form.recipe_type.data,
@@ -56,15 +67,16 @@ def create_challenge():
             cuisine_type=form.cuisine_type.data,
             cuisine_style=form.cuisine_style.data,
             difficulty_level=form.difficulty_level.data,
-            user_id=current_user.id  # Assuming current_user is from Flask-Login
+            image_filename=filename,  # Save filename to the database
+            user_id=current_user.id
         )
         db.session.add(challenge)
         db.session.commit()
         flash('Your challenge has been created!', 'success')
         return redirect(url_for('main.challenge_list'))
     else:
-        # Log or print form errors to see what's going wrong
-        print(form.errors)  
+        # If form doesn't validate, log errors
+        print(form.errors)
 
     return render_template('create_challenge.html', title='Create Challenge', form=form)
 
@@ -83,3 +95,8 @@ def logout():
 @login_required
 def dashboard():
     return render_template('dashboard.html', title='Dashboard')
+
+@main.route('/challenge/<int:challenge_id>')
+def challenge_detail(challenge_id):
+    challenge = Challenge.query.get_or_404(challenge_id)
+    return render_template('challenge_detail.html', challenge=challenge)

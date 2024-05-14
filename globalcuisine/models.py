@@ -38,6 +38,7 @@ class Challenge(db.Model):
     cuisine_type = db.Column(db.String(100))  # Make sure this line exists
     cuisine_style = db.Column(db.String(100))  # Make sure this line exists
     difficulty_level = db.Column(db.String(50), nullable=False)
+    image_filename = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     submissions = db.relationship('Submission', backref='challenge', lazy=True)
 
