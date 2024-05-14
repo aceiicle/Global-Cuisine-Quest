@@ -99,4 +99,11 @@ def dashboard():
 @main.route('/challenge/<int:challenge_id>')
 def challenge_detail(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
-    return render_template('challenge_detail.html', challenge=challenge)
+    submissions = Submission.query.filter_by(challenge_id=challenge_id).all()
+    return render_template('challenge_detail.html', challenge=challenge, submissions = submissions)
+
+@main.route('/accept_challenge/<int:challenge_id>', methods=['POST'])
+@login_required
+def accept_challenge(challenge_id):
+    # Logic to accept the challenge
+    return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))

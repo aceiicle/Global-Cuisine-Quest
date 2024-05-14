@@ -4,7 +4,7 @@ from . import db
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint, url_prefix='/')
     db.create_all(app=app)
     return app
 
