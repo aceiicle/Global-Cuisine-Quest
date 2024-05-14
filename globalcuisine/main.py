@@ -1,6 +1,6 @@
 # globalcuisine/main.py
 import os
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -109,7 +109,20 @@ def logout():
 def dashboard():
     return render_template('dashboard.html', title='Dashboard')
 
+@main.route('/recipe/<int:recipe_id>')
+def recipe(recipe_id):
+    # Fetch recipe details from the database defined in models.py
+    recipe = Recipe.query.get(recipe_id)
+    if recipe:
+        return render_template('recipe.html', recipe=recipe)
+    else:
+        abort(404)
+
 @main.route('/challenge/<int:challenge_id>')
 def challenge_detail(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     return render_template('challenge_detail.html', challenge=challenge)
+
+@main.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
