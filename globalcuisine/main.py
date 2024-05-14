@@ -1,18 +1,31 @@
 # globalcuisine/main.py
 import os
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from . import db
-from .models import User, Challenge, Submission
+from .models import User, Challenge, Submission, Recipe
 from .forms import CreateChallengeForm, LoginForm, RegistrationForm
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    recipes = Recipe.query.all()
+    asian_recipes = Recipe.get_random_recipes('Asian', count=3)
+    european_recipes = Recipe.get_random_recipes('European', count=3)
+    australian_recipes = Recipe.get_random_recipes('Australian', count=3)
+    south_american_recipes = Recipe.get_random_recipes('South American', count=3)
+    north_american_recipes = Recipe.get_random_recipes('North American', count=3)
+    african_recipes = Recipe.get_random_recipes('African', count=3)
+    return render_template('index.html', recipes=recipes,
+                            asian_recipes=asian_recipes, 
+                            european_recipes=european_recipes,
+                            australian_recipes=australian_recipes, 
+                            south_american_recipes=south_american_recipes,
+                            north_american_recipes=north_american_recipes, 
+                            african_recipes=african_recipes)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -96,6 +109,15 @@ def logout():
 def dashboard():
     return render_template('dashboard.html', title='Dashboard')
 
+@main.route('/recipe/<int:recipe_id>')
+def recipe(recipe_id):
+    # Fetch recipe details from the database defined in models.py
+    recipe = Recipe.query.get(recipe_id)
+    if recipe:
+        return render_template('recipe.html', recipe=recipe)
+    else:
+        abort(404)
+
 @main.route('/challenge/<int:challenge_id>')
 def challenge_detail(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
@@ -107,3 +129,7 @@ def challenge_detail(challenge_id):
 def accept_challenge(challenge_id):
     # Logic to accept the challenge
     return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+
+@main.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
