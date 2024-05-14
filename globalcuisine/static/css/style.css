@@ -140,6 +140,34 @@ form .form-control:focus {
     width: 200px; /* Adjust width as needed */
 }
 
+.recipe_page {
+    display: block;
+    text-align: left;
+    margin: auto;
+}
+
+.recipe_page ol, .recipe_page ul{
+    margin: auto; 
+    text-align: left;
+}
+
+.recipe_page_content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.recipe_page_image {
+    flex: 1;
+    width: 75%;
+    height: auto;
+}
+
+.recipe_page_details {
+    flex: 1;
+    padding: 10px;
+}
+
+
 .recipe a {
     color: black;
     text-decoration: none;
@@ -156,6 +184,7 @@ form .form-control:focus {
     display: block;
     padding: 10px;
 }
+
 .column {
     position: relative;
     overflow: hidden;

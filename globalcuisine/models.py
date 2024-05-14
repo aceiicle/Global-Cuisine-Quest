@@ -11,8 +11,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     challenges = db.relationship('Challenge', backref='author', lazy=True)
     submissions = db.relationship('Submission', backref='user', lazy=True)
-    is_authenticated = True
-    is_active = True
+    # is_authenticated = True
+    # is_active = True
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

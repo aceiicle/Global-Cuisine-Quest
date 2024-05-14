@@ -1,5 +1,5 @@
 # globalcuisine/main.py
-from flask import Blueprint, render_template
+from flask import Blueprint, abort, render_template
 from .forms import CreateChallengeForm
 from flask import flash
 
@@ -32,3 +32,18 @@ def create_challenge():
         flash('Challenge created successfully!', 'success')
         return redirect(url_for('main.challenge_list'))
     return render_template('create_challenge.html', form=form)
+
+from .recipes import recipes  # Import the recipes list from the recipes module
+@main.route('/recipe/<int:recipe_id>')
+def recipe(recipe_id):
+    # Fetch recipe details from the database (currently in a dictionary in recipes.py)
+    recipe = next((r for r in recipes if r['id'] == recipe_id), None)
+    if recipe:
+        return render_template('recipe.html', recipe=recipe)
+    else:
+        abort(404)
+    
+@main.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
