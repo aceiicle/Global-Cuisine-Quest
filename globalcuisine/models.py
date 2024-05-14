@@ -29,8 +29,15 @@ class User(UserMixin, db.Model):
 class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    recipe_type = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    is_recipe = db.Column(db.Boolean, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    recipe_instructions = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    cuisine_type = db.Column(db.String(100))  # Make sure this line exists
+    cuisine_style = db.Column(db.String(100))  # Make sure this line exists
+    difficulty_level = db.Column(db.String(50), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     submissions = db.relationship('Submission', backref='challenge', lazy=True)
 

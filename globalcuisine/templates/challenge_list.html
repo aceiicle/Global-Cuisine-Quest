@@ -9,7 +9,12 @@
         {% for challenge in challenges %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ url_for('static', filename='images/challenges/' + challenge.image_filename) }}" class="card-img-top" alt="Image of {{ challenge.title }}">
+                    {% if challenge.image_filename %}
+                        <img src="{{ url_for('static', filename='images/challenges/' + challenge.image_filename) }}" class="card-img-top" alt="Image of {{ challenge.title }}">
+                    {% else %}
+                        <!-- Optionally display a default image or no image -->
+                        <img src="{{ url_for('static', filename='images/default.png') }}" class="card-img-top" alt="Default Image">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ challenge.title }}</h5>
                         <p class="card-text">{{ challenge.description | truncate(150) }}</p>
