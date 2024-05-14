@@ -40,3 +40,14 @@ class Submission(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    image = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    cuisine = db.Column(db.String(100), nullable=False) # e.g. Japanese, Italian
+    ingredients = db.Column(db.Text, nullable=False) # comma-separated ingredients
+    preparation_time = db.Column(db.Integer, nullable=False) # in minutes
+    cooking_time = db.Column(db.Integer, nullable=False) # in minutes
+    steps = db.Column(db.Text, nullable=False) # comma-separated steps
