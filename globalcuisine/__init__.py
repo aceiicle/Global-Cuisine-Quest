@@ -43,8 +43,9 @@ def create_app():
     # User loader function for Flask-Login
     from .models import User
     with app.app_context():
-        db.drop_all()
+       # db.drop_all()
         db.create_all()
+
 
     @login_manager.user_loader
     def load_user(user_id):

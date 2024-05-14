@@ -5,14 +5,27 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from . import db
-from .models import User, Challenge, Submission
+from .models import User, Challenge, Submission, Recipe
 from .forms import CreateChallengeForm, LoginForm, RegistrationForm
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    recipes = Recipe.query.all()
+    asian_recipes = Recipe.get_random_recipes('Asian', count=3)
+    european_recipes = Recipe.get_random_recipes('European', count=3)
+    australian_recipes = Recipe.get_random_recipes('Australian', count=3)
+    south_american_recipes = Recipe.get_random_recipes('South American', count=3)
+    north_american_recipes = Recipe.get_random_recipes('North American', count=3)
+    african_recipes = Recipe.get_random_recipes('African', count=3)
+    return render_template('index.html', recipes=recipes,
+                            asian_recipes=asian_recipes, 
+                            european_recipes=european_recipes,
+                            australian_recipes=australian_recipes, 
+                            south_american_recipes=south_american_recipes,
+                            north_american_recipes=north_american_recipes, 
+                            african_recipes=african_recipes)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
