@@ -2,7 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from random import sample
 from . import db
+import logging
+logging.basicConfig(level=logging.INFO)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,8 +14,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     challenges = db.relationship('Challenge', backref='author', lazy=True)
     submissions = db.relationship('Submission', backref='user', lazy=True)
-    # is_authenticated = True
-    # is_active = True
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -46,8 +47,22 @@ class Recipe(db.Model):
     name = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    region = db.Column(db.String(100), nullable=False) # e.g. Asian, European, Australian, South American, North American, African
     cuisine = db.Column(db.String(100), nullable=False) # e.g. Japanese, Italian
     ingredients = db.Column(db.Text, nullable=False) # comma-separated ingredients
     preparation_time = db.Column(db.Integer, nullable=False) # in minutes
     cooking_time = db.Column(db.Integer, nullable=False) # in minutes
     steps = db.Column(db.Text, nullable=False) # comma-separated steps
+
+    def get_random_recipes(target_region, count=3):
+        # Get a list of random recipes from the database based on the cuisine
+        all_recipes = Recipe.query.filter_by(region=target_region).all()
+        logging.info(f"all_recipes for {target_region}: {all_recipes}")
+        if len(all_recipes) <= count:
+            random_recipes = all_recipes
+        else:
+            random_recipes = sample(all_recipes, count)
+
+        logging.info(f"random_recipes for {target_region}: {random_recipes}")
+
+        return random_recipes

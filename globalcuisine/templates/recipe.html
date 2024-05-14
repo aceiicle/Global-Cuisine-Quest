@@ -3,10 +3,8 @@
 <div class="recipe_page">
     <h2>{{ recipe.name }}</h2>
     <div class="recipe_page_content">
-        <div class="recipe_page_image">
-            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.name }}">
-            <p>{{ recipe.description }}</p>
-        </div>
+        <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.name }}">
+        <p>{{ recipe.description }}</p>
         <div class="recipe_page_details">
             <h3>Ingredients</h3>
             <ul>
@@ -19,12 +17,12 @@
             <h3>Cooking Time</h3>
             <p>{{ recipe.cooking_time }} minutes</p>
         </div>
-    </div>
-    <h3>Steps</h3>
-    <ol>
-        {% for step in recipe.steps.split('. ') %}
+        <h3>Steps</h3>
+        <ol>
+            {% for step in recipe.steps.split('. ') %}
             <li>{{ step }}</li>
-        {% endfor %}
-    </ol>
+            {% endfor %}
+        </ol>
+    </div>
 </div>
 {% endblock %}
