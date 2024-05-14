@@ -87,9 +87,6 @@ def create_challenge():
         db.session.commit()
         flash('Your challenge has been created!', 'success')
         return redirect(url_for('main.challenge_list'))
-    else:
-        # If form doesn't validate, log errors
-        print(form.errors)
 
     return render_template('create_challenge.html', title='Create Challenge', form=form)
 
