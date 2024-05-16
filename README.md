@@ -24,7 +24,7 @@ The web application is built using Flask as the backend framework and SQLite as 
    ```cd global-quisine-quest```
 3. Run the Flask application.
 
-   ```python3 run.py```
+   ```python3 app.py```
 4. Access the application in your web browser.
 
    ```http://127.0.0.1:5000```
