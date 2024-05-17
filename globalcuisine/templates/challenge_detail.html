@@ -7,12 +7,9 @@
     <p><strong>Posted by:</strong> {{ challenge.author.username }} on {{ challenge.created_at.strftime('%Y-%m-%d') }}</p>
 
     {% if current_user.is_authenticated %}
-    <form action="{{ url_for('main.accept_challenge', challenge_id=challenge.id) }}" method="post">
-        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-        <button type="submit" class="btn btn-success">Accept Challenge</button>
-    </form>
+        <a href="{{ url_for('main.submit_challenge', challenge_id=challenge.id) }}" class="btn btn-success">Submit Completion</a>
     {% else %}
-    <p><a href="{{ url_for('auth.login') }}">Log in</a> to accept this challenge.</p>
+        <p><a href="{{ url_for('auth.login') }}">Log in</a> to submit your completion.</p>
     {% endif %}
 
     <hr>
@@ -21,7 +18,7 @@
     {% if submissions %}
         <div class="list-group">
             {% for submission in submissions %}
-                <a href="{{ url_for('main.submission_detail', submission_id=submission.id) }}" class="list-group-item list-group-item-action">
+                <a href="#" class="list-group-item list-group-item-action">
                     <h5 class="mb-1">{{ submission.user.username }}'s submission</h5>
                     <p class="mb-1">{{ submission.comment | truncate(100) }}</p>
                     <small>Submitted on {{ submission.created_at.strftime('%Y-%m-%d') }}</small>
