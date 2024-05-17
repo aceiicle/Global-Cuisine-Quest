@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from . import db
-from .models import User, Challenge, Submission, Recipe
+from .models import ActiveChallenge, User, Challenge, Submission, Recipe, CompletedChallenge
 from .forms import CreateChallengeForm, LoginForm, RegistrationForm, SubmissionForm
 
 main = Blueprint('main', __name__)
@@ -104,7 +104,16 @@ def logout():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', title='Dashboard')
+    active_challenges = ActiveChallenge.query.filter_by(user_id=current_user.id).all()
+    completed_challenges = CompletedChallenge.query.filter_by(user_id=current_user.id).all()
+    suggested_challenges = Challenge.query.all()  # Modify this query to exclude challenges the user has already accepted or completed
+
+    return render_template('dashboard.html', title='Dashboard', 
+                           active_challenges=active_challenges, 
+                           completed_challenges=completed_challenges, 
+                           suggested_challenges=suggested_challenges)
+
+
 
 @main.route('/recipe/<int:recipe_id>')
 def recipe(recipe_id):
@@ -119,18 +128,21 @@ def recipe(recipe_id):
 def challenge_detail(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     submissions = Submission.query.filter_by(challenge_id=challenge_id).all()
-    return render_template('challenge_detail.html', challenge=challenge, submissions = submissions)
+    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first() if current_user.is_authenticated else None
+    return render_template('challenge_detail.html', challenge=challenge, submissions=submissions, active_challenge=active_challenge)
 
-@main.route('/accept_challenge/<int:challenge_id>', methods=['POST'])
-@login_required
-def accept_challenge(challenge_id):
-    # Logic to accept the challenge
-    return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+
 
 @main.route('/challenge/<int:challenge_id>/submit', methods=['GET', 'POST'])
 @login_required
 def submit_challenge(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
+    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
+    
+    if not active_challenge:
+        flash('You need to accept the challenge first!', 'warning')
+        return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+    
     form = SubmissionForm()
     if form.validate_on_submit():
         submission = Submission(
@@ -143,6 +155,23 @@ def submit_challenge(challenge_id):
         flash('Your submission has been posted!', 'success')
         return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
     return render_template('submit_challenge.html', title='Submit Challenge', form=form, challenge=challenge)
+
+@main.route('/challenge/<int:challenge_id>/accept', methods=['POST'])
+@login_required
+def accept_challenge(challenge_id):
+    challenge = Challenge.query.get_or_404(challenge_id)
+    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
+
+    if active_challenge is None:
+        active_challenge = ActiveChallenge(user_id=current_user.id, challenge_id=challenge_id)
+        db.session.add(active_challenge)
+        db.session.commit()
+        flash('You have accepted the challenge!', 'success')
+    else:
+        flash('You have already accepted this challenge!', 'warning')
+
+    return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+
 
 
 @main.app_errorhandler(404)

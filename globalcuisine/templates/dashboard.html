@@ -8,10 +8,10 @@
         <div class="col-md-4">
             <h4>Your Active Challenges</h4>
             <ul class="list-group">
-                {% for challenge in active_challenges %}
+                {% for active_challenge in active_challenges %}
                     <li class="list-group-item">
-                        <a href="{{ url_for('main.challenge_detail', challenge_id=challenge.id) }}">
-                            {{ challenge.title }}
+                        <a href="{{ url_for('main.challenge_detail', challenge_id=active_challenge.challenge.id) }}">
+                            {{ active_challenge.challenge.title }}
                         </a>
                     </li>
                 {% else %}
@@ -23,8 +23,8 @@
         <div class="col-md-4">
             <h4>Completed Challenges</h4>
             <ul class="list-group">
-                {% for challenge in completed_challenges %}
-                    <li class="list-group-item">{{ challenge.title }}</li>
+                {% for completed_challenge in completed_challenges %}
+                    <li class="list-group-item">{{ completed_challenge.challenge.title }}</li>
                 {% else %}
                     <li class="list-group-item">You have not completed any challenges yet.</li>
                 {% endfor %}

@@ -14,6 +14,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     challenges = db.relationship('Challenge', backref='author', lazy=True)
     submissions = db.relationship('Submission', backref='user', lazy=True)
+    active_challenges = db.relationship('ActiveChallenge', backref='user', lazy=True)
+    completed_challenges = db.relationship('CompletedChallenge', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -42,6 +44,8 @@ class Challenge(db.Model):
     image_filename = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     submissions = db.relationship('Submission', backref='challenge', lazy=True)
+    active_users = db.relationship('ActiveChallenge', backref='challenge', lazy=True)
+    completed_users = db.relationship('CompletedChallenge', backref='challenge', lazy=True)
 
 class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,6 +53,18 @@ class Submission(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+
+class ActiveChallenge(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+    accepted_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+class CompletedChallenge(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+    completed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)    
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)

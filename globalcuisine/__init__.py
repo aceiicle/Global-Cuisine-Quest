@@ -25,7 +25,7 @@ def create_app():
     @app.cli.command('create-admin')
     @with_appcontext
     def create_admin():
-        from models import User  # Importing here to avoid circular imports
+        from .models import User  # Importing here to avoid circular imports
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', email='admin@example.com')
             admin.set_password('securepassword')  # Assuming you have a set_password method to hash the password
