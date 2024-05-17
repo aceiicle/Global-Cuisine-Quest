@@ -78,6 +78,11 @@ class CreateChallengeForm(FlaskForm):
     difficulty_level = StarField('Difficulty Level', validators=[DataRequired()])
     image = FileField('Upload Image', validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')])
     submit = SubmitField('Create')
+
+class SubmissionForm(FlaskForm):
+    comment = TextAreaField('Comment', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 # Add JavaScript to toggle the visibility of the textarea based on the boolean field's value
 toggle_script = """
 <script>

@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from . import db
 from .models import User, Challenge, Submission, Recipe
-from .forms import CreateChallengeForm, LoginForm, RegistrationForm
+from .forms import CreateChallengeForm, LoginForm, RegistrationForm, SubmissionForm
 
 main = Blueprint('main', __name__)
 
@@ -126,6 +126,24 @@ def challenge_detail(challenge_id):
 def accept_challenge(challenge_id):
     # Logic to accept the challenge
     return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+
+@main.route('/challenge/<int:challenge_id>/submit', methods=['GET', 'POST'])
+@login_required
+def submit_challenge(challenge_id):
+    challenge = Challenge.query.get_or_404(challenge_id)
+    form = SubmissionForm()
+    if form.validate_on_submit():
+        submission = Submission(
+            comment=form.comment.data,
+            user_id=current_user.id,
+            challenge_id=challenge_id
+        )
+        db.session.add(submission)
+        db.session.commit()
+        flash('Your submission has been posted!', 'success')
+        return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+    return render_template('submit_challenge.html', title='Submit Challenge', form=form, challenge=challenge)
+
 
 @main.app_errorhandler(404)
 def page_not_found(e):
