@@ -126,11 +126,15 @@ def recipe(recipe_id):
         abort(404)
 
 @main.route('/challenge/<int:challenge_id>')
+@login_required
 def challenge_detail(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
+    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
+    completed_challenge = CompletedChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
     submissions = Submission.query.filter_by(challenge_id=challenge_id).all()
-    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first() if current_user.is_authenticated else None
-    return render_template('challenge_detail.html', challenge=challenge, submissions=submissions, active_challenge=active_challenge)
+    return render_template('challenge_detail.html', challenge=challenge, active_challenge=active_challenge,
+                           completed_challenge=completed_challenge, submissions=submissions)
+
 
 
 
