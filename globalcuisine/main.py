@@ -106,7 +106,8 @@ def logout():
 def dashboard():
     active_challenges = ActiveChallenge.query.filter_by(user_id=current_user.id).all()
     completed_challenges = CompletedChallenge.query.filter_by(user_id=current_user.id).all()
-    suggested_challenges = Challenge.query.all()  # Modify this query to exclude challenges the user has already accepted or completed
+    suggested_challenges = Challenge.query.filter(~Challenge.id.in_(
+        [ac.challenge_id for ac in active_challenges] + [cc.challenge_id for cc in completed_challenges])).all()
 
     return render_template('dashboard.html', title='Dashboard', 
                            active_challenges=active_challenges, 
@@ -171,6 +172,18 @@ def accept_challenge(challenge_id):
         flash('You have already accepted this challenge!', 'warning')
 
     return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
+
+@main.route('/challenge/<int:challenge_id>/cancel', methods=['POST'])
+@login_required
+def cancel_challenge(challenge_id):
+    active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
+    if active_challenge:
+        db.session.delete(active_challenge)
+        db.session.commit()
+        flash('You have successfully canceled the challenge.', 'success')
+    else:
+        flash('You have not accepted this challenge.', 'danger')
+    return redirect(url_for('main.dashboard'))
 
 
 
