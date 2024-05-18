@@ -139,23 +139,28 @@ def challenge_detail(challenge_id):
 def submit_challenge(challenge_id):
     challenge = Challenge.query.get_or_404(challenge_id)
     active_challenge = ActiveChallenge.query.filter_by(user_id=current_user.id, challenge_id=challenge_id).first()
-    
+
     if not active_challenge:
-        flash('You need to accept the challenge first!', 'warning')
+        flash('You have not accepted this challenge.', 'danger')
         return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
-    
+
     form = SubmissionForm()
     if form.validate_on_submit():
-        submission = Submission(
-            comment=form.comment.data,
-            user_id=current_user.id,
-            challenge_id=challenge_id
-        )
+        submission = Submission(comment=form.comment.data, user_id=current_user.id, challenge_id=challenge_id)
         db.session.add(submission)
+        
+        # Remove from active challenges
+        db.session.delete(active_challenge)
+        
+        # Add to completed challenges
+        completed_challenge = CompletedChallenge(user_id=current_user.id, challenge_id=challenge_id)
+        db.session.add(completed_challenge)
         db.session.commit()
-        flash('Your submission has been posted!', 'success')
-        return redirect(url_for('main.challenge_detail', challenge_id=challenge_id))
-    return render_template('submit_challenge.html', title='Submit Challenge', form=form, challenge=challenge)
+
+        flash('You have successfully submitted the challenge.', 'success')
+        return redirect(url_for('main.dashboard'))
+
+    return render_template('submit_challenge.html', challenge=challenge, form=form)
 
 @main.route('/challenge/<int:challenge_id>/accept', methods=['POST'])
 @login_required

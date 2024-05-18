@@ -8,10 +8,14 @@
 
     {% if current_user.is_authenticated %}
         {% if active_challenge %}
-            <a href="{{ url_for('main.submit_challenge', challenge_id=challenge.id) }}" class="btn btn-success">Submit Challenge</a>
+            <form action="{{ url_for('main.submit_challenge', challenge_id=challenge.id) }}" method="post">
+                <button type="submit" class="btn btn-success">Submit Challenge</button>
+            </form>
             <form action="{{ url_for('main.cancel_challenge', challenge_id=challenge.id) }}" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-danger">Cancel Challenge</button>
             </form>
+        {% elif completed_challenge %}
+            <p>You have completed this challenge.</p>
         {% else %}
             <form action="{{ url_for('main.accept_challenge', challenge_id=challenge.id) }}" method="post">
                 <button type="submit" class="btn btn-primary">Accept Challenge</button>
