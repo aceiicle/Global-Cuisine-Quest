@@ -96,10 +96,7 @@ def challenge_list():
     challenges = Challenge.query.all()
     return render_template('challenge_list.html', challenges=challenges)
 
-@main.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('main.index'))
+
 
 @main.route('/dashboard')
 @login_required
