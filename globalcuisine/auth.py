@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 import logging
 logging.basicConfig(level=logging.INFO)
 from flask import Blueprint, render_template, redirect, session, url_for, flash, request, jsonify
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from .forms import RegistrationForm, LoginForm
 from .models import User
 from . import db
@@ -15,8 +15,6 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    # Undesired behavior: Does not redirect to the dashboard page upon successful login
-    # I do not understand why views.py has the same code as this file, I don't even know if I wrote the code in views.py
     """
     Handle the login functionality.
 
@@ -43,7 +41,9 @@ def login():
 
 @auth.route('/logout')
 def logout():
-    return 'Logout'
+    logout_user()
+    session.clear()
+    return redirect(url_for('main.index'))
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
