@@ -91,12 +91,21 @@ def create_challenge():
     return render_template('create_challenge.html', title='Create Challenge', form=form)
 
 
-@main.route('/view_challenges') # or it is challenges
-def challenge_list():
-    challenges = Challenge.query.all()
+@main.route('/challenge_list/', defaults={'sort_by': 'newest'})
+@main.route('/view_challenges/<sort_by>') # or it is challenges
+def challenge_list(sort_by):
+    if sort_by == 'newest':
+        challenges = Challenge.query.order_by(Challenge.created_at.desc()).all()
+    elif sort_by == 'oldest':
+        challenges = Challenge.query.order_by(Challenge.created_at.asc()).all()
+    elif sort_by == 'difficulty':
+        challenges = Challenge.query.order_by(Challenge.difficulty_level.desc()).all()
+    else:
+        challenges = Challenge.query.all() #Default no sorting
     return render_template('challenge_list.html', challenges=challenges)
 
 @main.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
