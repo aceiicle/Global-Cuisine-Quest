@@ -5,18 +5,22 @@
     <h2>{{ challenge.title }}</h2>
     <img src="{{ url_for('static', filename='images/' ~ challenge.image_filename) }}" alt="{{ challenge.title }}" class="img-fluid">
     <p><strong>Description:</strong> {{ challenge.description }}</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        {% for ingredient in challenge.ingredients.split(',') %}
-            <li>{{ ingredient }}</li>
-        {% endfor %}
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        {% for step in challenge.recipe_instructions.split(',') %}
-            <li>{{ step }}</li>
-        {% endfor %}
-    </ol>
+
+    {% if challenge.is_recipe %}
+        <p><strong>Ingredients:</strong></p>
+        <ul>
+            {% for ingredient in challenge.ingredients.split(',') %}
+                <li>{{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Instructions:</strong></p>
+        <ol>
+            {% for step in challenge.recipe_instructions.split(',') %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+    
     <p><strong>Posted by:</strong> {{ challenge.author.username }} on {{ challenge.created_at.strftime('%Y-%m-%d') }}</p>
 
     {% if current_user.is_authenticated %}
@@ -46,6 +50,9 @@
             {% for submission in submissions %}
                 <a href="#" class="list-group-item list-group-item-action">
                     <h5 class="mb-1">{{ submission.user.username }}'s submission</h5>
+                    {% if submission.image_filename %}
+                        <img src="{{ url_for('static', filename='images/' ~ submission.image_filename) }}" alt="Submission Image" class="img-fluid">
+                    {% endif %}
                     <p class="mb-1">{{ submission.comment | truncate(100) }}</p>
                     <small>Submitted on {{ submission.created_at.strftime('%Y-%m-%d') }}</small>
                 </a>

@@ -50,9 +50,11 @@ class Challenge(db.Model):
 class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.Text)
+    image_filename = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+
 
 class ActiveChallenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)

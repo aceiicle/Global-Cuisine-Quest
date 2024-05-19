@@ -160,7 +160,14 @@ def submit_challenge(challenge_id):
 
     form = SubmissionForm()
     if form.validate_on_submit():
-        submission = Submission(comment=form.comment.data, user_id=current_user.id, challenge_id=challenge_id)
+        image_file = form.image.data
+        filename = None
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+        
+        submission = Submission(comment=form.comment.data, user_id=current_user.id, challenge_id=challenge_id, image_filename=filename)
         db.session.add(submission)
         
         # Remove from active challenges
