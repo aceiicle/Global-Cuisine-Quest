@@ -104,11 +104,15 @@ def challenge_list(sort_by):
         challenges = Challenge.query.all() #Default no sorting
     return render_template('challenge_list.html', challenges=challenges)
 
+<<<<<<< HEAD
 @main.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+=======
+
+>>>>>>> 31692ef64e67e0308c9c17bdc9a41ac0f92d4112
 
 @main.route('/dashboard')
 @login_required
